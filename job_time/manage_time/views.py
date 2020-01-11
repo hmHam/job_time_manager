@@ -36,14 +36,13 @@ class TimeManageAPIView(APIView):
         if event['type'] == 'follow':
             return self.follow(event)
         elif event['type'] == 'postback':
-            print(event['postback'])
-            if event['postback'] == 'clock_in':
+            if event['postback']['data'] == 'clock_in':
                 return self.clock_in(event)
-            elif event['postback'] == 'break_end':
+            elif event['postback']['data'] == 'break_end':
                 return self.temporary_clock_in(event)
-            elif event['postback'] == 'clock_out':
+            elif event['postback']['data'] == 'clock_out':
                 return self.clock_out(event)
-            elif event['postback'] == 'break_start':
+            elif event['postback']['data'] == 'break_start':
                 return self.temporary_clock_out(event)
         return Response({})
 
@@ -76,15 +75,12 @@ class TimeManageAPIView(APIView):
         member = Member.objects.filter(
             line_id__text=event['source']['userId']
         ).first()
-        print('a')
         clock_in_time = get_time_stamp(event)
-        print('b')
         Attendance.objects.create(
             clock_in_time=clock_in_time,
             date=clock_in_time.date(),
             member=member
         )
-        print('c')
         return reply(
             event,
             {
