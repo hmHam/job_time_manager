@@ -64,10 +64,14 @@ class TimeManageAPIView(APIView):
     def clock_in(self, event):
         '''出勤'''
         print(' call clock in')
+        member = Member.objects.filter(
+            user=self.request.user
+        ).first()
         clock_in_time = get_time_stamp(event)
         Attendance.objects.create(
             clock_in_time=clock_in_time,
-            date=clock_in_time.date()
+            date=clock_in_time.date(),
+            member=member
         )
         return reply(
             event,
@@ -84,9 +88,13 @@ class TimeManageAPIView(APIView):
     def break_end(self, event):
         '''休憩終了'''
         print(' call break end')
+        member = Member.objects.filter(
+            user=self.request.user
+        ).first()
         break_end_time = get_time_stamp(event)
         at = Attendance.objects.filter(
-            date=break_end_time.date()
+            date=break_end_time.date(),
+            member=member
         ).first()
         brk = at.break_set.objects.first()
         brk.end_time = break_end_time
@@ -107,9 +115,13 @@ class TimeManageAPIView(APIView):
     def clock_out(self, event):
         '''退勤'''
         print(' call clock out')
+        member = Member.objects.filter(
+            user=self.request.user
+        ).first()
         clock_out_time = get_time_stamp(event)
         at = Attendance.objects.filter(
-            date=clock_out_time.date()
+            date=clock_out_time.date(),
+            member=member
         )
         at.clock_out_time = clock_out_time
         at.save()
@@ -128,9 +140,13 @@ class TimeManageAPIView(APIView):
     def break_start(self, event):
         '''途中休憩開始'''
         print(' call break start')
+        member = Member.objects.filter(
+            user=self.request.user
+        ).first()
         break_start_time = get_time_stamp(event)
         at = Attendance.objects.filter(
-            date=break_start_time.date()
+            date=break_start_time.date(),
+            member=member
         ).first()
         Break.objects.create(
             attendance=at,
