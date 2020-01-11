@@ -3,13 +3,18 @@ import requests
 import pickle
 from datetime import datetime
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 
+try:
+    BASE_DIR = settings.BASE_DIR
+except ImproperlyConfigured:
+    BASE_DIR = ''
 
 CHANNEL_ID = '1653759302'
 CHANNEL_SECRET = '123371074bdeed8827c67507778eb106'
 
 def get_token():
-    with open(path.join(settings.BASE_DIR, 'token.pickle'), 'rb') as f:
+    with open(path.join(BASE_DIR, 'token.pickle'), 'rb') as f:
         try:
             token = pickle.load(f)
         except EOFError:

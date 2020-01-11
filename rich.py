@@ -1,5 +1,5 @@
 import requests
-from auth import auth
+from job_time.auth import auth
 import json
 from pprint import pprint
 from argparse import ArgumentParser
