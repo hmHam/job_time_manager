@@ -53,8 +53,13 @@ class TimeManageAPIView(APIView):
         }
         return reply(event, data)
 
+    def get_month_salary(self, event):
+        '''現在の月での給料を取得'''
+        pass
+
     def clock_in(self, event):
         '''出勤'''
+        print(' call clock in')
         clock_in_time = get_time_stamp(event)
         Attendance.objects.create(
             clock_in_time=clock_in_time,
@@ -74,6 +79,7 @@ class TimeManageAPIView(APIView):
 
     def break_end(self, event):
         '''休憩終了'''
+        print(' call break end')
         break_end_time = get_time_stamp(event)
         at = Attendance.objects.filter(
             date=break_end_time.date()
@@ -96,6 +102,7 @@ class TimeManageAPIView(APIView):
 
     def clock_out(self, event):
         '''退勤'''
+        print(' call clock out')
         clock_out_time = get_time_stamp(event)
         at = Attendance.objects.filter(
             date=clock_out_time.date()
@@ -116,6 +123,7 @@ class TimeManageAPIView(APIView):
 
     def break_start(self, event):
         '''途中休憩開始'''
+        print(' call break start')
         break_start_time = get_time_stamp(event)
         at = Attendance.objects.filter(
             date=break_start_time.date()
