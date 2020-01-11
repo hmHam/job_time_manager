@@ -104,7 +104,7 @@ class TimeManageAPIView(APIView):
             date=break_end_time.date(),
             member=member
         ).first()
-        brk = at.break_set.objects.first()
+        brk = at.break_set.first()
         brk.end_time = break_end_time
         brk.save()
         return push(
