@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 
 
 class TimeManageAPIView(APIView):
+    def get(self, reqeust, format=None):
+        return Response({})
+
     def post(self, request, format=None):
         event_type = self.request.data['type']
         print(request.data)
