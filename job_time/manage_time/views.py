@@ -12,6 +12,7 @@ def reply(self, event, data, headers={}):
     data["replyToken"] = event['replyToken']
     URL = 'https://api.line.me/v2/bot/message/reply'
     res = requests.post(URL, json=data, headers=headers)
+    print(res.json())
     return Response({}, status=res.status_code)
 
 
@@ -75,12 +76,15 @@ class TimeManageAPIView(APIView):
         member = Member.objects.filter(
             line_id__text=event['source']['userId']
         ).first()
+        print('a')
         clock_in_time = get_time_stamp(event)
-        print(Attendance.objects.create(
+        print('b')
+        Attendance.objects.create(
             clock_in_time=clock_in_time,
             date=clock_in_time.date(),
             member=member
-        ))
+        )
+        print('c')
         return reply(
             event,
             {
