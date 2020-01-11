@@ -130,7 +130,7 @@ class TimeManageAPIView(APIView):
         at = Attendance.objects.filter(
             date=clock_out_time.date(),
             member=member
-        )
+        ).first()
         at.clock_out_time = clock_out_time
         at.save()
         return reply(
