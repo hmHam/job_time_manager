@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from job_time.manage_time import views
 
 urlpatterns = [
+    path('', views.TimeManageAPIView.as_view()),
     path('admin/', admin.site.urls),
 ]

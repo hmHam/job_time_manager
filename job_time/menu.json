@@ -1,0 +1,63 @@
+{
+    "size": {
+        "width": 800,
+        "height": 270
+    },
+    "selected": true,
+    "name": "timeManage",
+    "chatBarText": "出退勤ボタン",
+    "areas": [
+        {
+            "bounds": {
+                "x": 0,
+                "y": 135,
+                "width": 400,
+                "height": 135
+            },
+            "action": {
+                "type": "postback",
+                "label": "出勤",
+                "data": "clock_in"
+            }
+        },
+        {
+            "bounds": {
+                "x": 400,
+                "y": 135,
+                "width": 400,
+                "height": 135
+            },
+            "action": {
+                "type": "postback",
+                "label": "退勤",
+                "data": "clock_out"
+            }
+        },
+        {
+            "bounds": {
+                "x": 0,
+                "y": 0,
+                "width": 400,
+                "height": 135
+            },
+            "action": {
+                "type": "postback",
+                "label": "再出勤",
+                "data": "temporary_clock_in"
+            }
+        },
+        {
+            "bounds": {
+                "x": 400,
+                "y": 0,
+                "width": 400,
+                "height": 135
+            },
+            "action": {
+                "type": "postback",
+                "label": "一時退勤",
+                "data": "temporary_clock_out"
+            }
+        }
+    ]
+}
