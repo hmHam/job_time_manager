@@ -11,7 +11,7 @@ class TimeManageAPIView(APIView):
         return Response({})
 
     def post(self, request, format=None):
-        event_type = self.request.data['type']
+        event_type = self.request.data.get('type', '')
         print(request.data)
         if event_type == 'follow':
             return self.follow(request.data)
