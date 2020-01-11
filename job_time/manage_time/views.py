@@ -76,11 +76,11 @@ class TimeManageAPIView(APIView):
             user=self.request.user
         ).first()
         clock_in_time = get_time_stamp(event)
-        Attendance.objects.create(
+        print(Attendance.objects.create(
             clock_in_time=clock_in_time,
             date=clock_in_time.date(),
             member=member
-        )
+        ))
         return reply(
             event,
             {
