@@ -158,7 +158,7 @@ class TimeManageAPIView(APIView):
         ).first()
         Break.objects.create(
             attendance=at,
-            start_time=break_end_time
+            start_time=break_start_time
         )
         return push(
             event,
