@@ -24,10 +24,10 @@ class TimeManageAPIView(APIView):
 
     def post(self, request, format=None):
         event = self.request.data['events'][0]
-        print(request.data)
         if event['type'] == 'follow':
             return self.follow(event)
         elif event['type'] == 'postback':
+            print(event['postback'])
             if event['postback'] == 'clock_in':
                 return self.clock_in(event)
             elif event['postback'] == 'break_end':
