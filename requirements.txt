@@ -4,3 +4,6 @@ django-filter
 requests
 gunicorn
 whitenoise
+python-dotenv
+dj-database-url
+django-heroku
