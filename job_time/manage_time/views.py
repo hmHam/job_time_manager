@@ -8,9 +8,9 @@ from job_time.auth import auth
 from job_time.manage_time.models import Attendance, Break, Member, LineID
 
 @auth
-def reply(self, event, data, headers={}):
-    data["replyToken"] = event['replyToken']
-    URL = 'https://api.line.me/v2/bot/message/reply'
+def push(self, event, data, headers={}):
+    data["to"] = event['source']['userId']
+    URL = 'https://api.line.me/v2/bot/message/push'
     res = requests.post(URL, json=data, headers=headers)
     print(res.json())
     return Response({}, status=res.status_code)
@@ -63,7 +63,7 @@ class TimeManageAPIView(APIView):
                 },
             ]
         }
-        return reply(event, data)
+        return push(event, data)
 
     def get_month_salary(self, event):
         '''現在の月での給料を取得'''
@@ -81,7 +81,7 @@ class TimeManageAPIView(APIView):
             date=clock_in_time.date(),
             member=member
         )
-        return reply(
+        return push(
             event,
             {
                 'messages': [
@@ -107,7 +107,7 @@ class TimeManageAPIView(APIView):
         brk = at.break_set.objects.first()
         brk.end_time = break_end_time
         brk.save()
-        return reply(
+        return push(
             event,
             {
                 'messages': [
@@ -133,7 +133,7 @@ class TimeManageAPIView(APIView):
         ).first()
         at.clock_out_time = clock_out_time
         at.save()
-        return reply(
+        return push(
             event,
             {
                 'messages': [
@@ -160,7 +160,7 @@ class TimeManageAPIView(APIView):
             attendance=at,
             start_time=break_end_time
         )
-        return reply(
+        return push(
             event,
             {
                 'messages': [
