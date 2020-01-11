@@ -5,7 +5,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from job_time.auth import auth
-from job_time.manage_time.models import Attendance, Break, Member
+from job_time.manage_time.models import Attendance, Break, Member, LineID
 
 @auth
 def reply(self, event, data, headers={}):
@@ -22,8 +22,16 @@ class TimeManageAPIView(APIView):
     def get(self, reqeust, format=None):
         return Response({})
 
+    def cache_line_id(self, event):
+        userId = event['source']['userId']
+        line_id = LineID.objects.filter(text=userId).first()
+        if line_id is None:
+            return LineID.objects.create(text=userId)
+        return line_id
+        
     def post(self, request, format=None):
         event = self.request.data['events'][0]
+        self.cache_line_id(event)
         if event['type'] == 'follow':
             return self.follow(event)
         elif event['type'] == 'postback':
@@ -45,7 +53,7 @@ class TimeManageAPIView(APIView):
         print('userID', userId)
         Member.objects.create(
             user=user,
-            line_id=userId
+            line_id=LineID.objects.filter(text=userId).first()
         )
         data = {
             "messages" : [
