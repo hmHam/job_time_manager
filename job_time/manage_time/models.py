@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 class Member(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     line_id = models.CharField(max_length=128)
-    hourly_wage = models.PositiveIntegerField()
+    name = models.CharField(max_length=128, default='')
+    hourly_wage = models.PositiveIntegerField(default=1000)
 
 # Create your models here.
 class Attendance(models.Model):

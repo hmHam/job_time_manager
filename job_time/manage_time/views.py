@@ -5,7 +5,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from job_time.auth import auth
-from job_time.manage_time.models import Attendance, Break
+from job_time.manage_time.models import Attendance, Break, Member
 
 @auth
 def reply(self, event, data, headers={}):
@@ -41,8 +41,12 @@ class TimeManageAPIView(APIView):
     def follow(self, event):
         '''アカウントをフォローした際にユーザーを作成する'''
         userId = event['source']['userId']
-        User.objects.create(username=userId)
+        user = User.objects.create(username=userId)
         print('userID', userId)
+        Member.objects.create(
+            user=user,
+            line_id=userId
+        )
         data = {
             "messages" : [
                 {
