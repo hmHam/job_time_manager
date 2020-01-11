@@ -73,7 +73,7 @@ class TimeManageAPIView(APIView):
         '''出勤'''
         print(' call clock in')
         member = Member.objects.filter(
-            user=self.request.user
+            line_id__text=event['source']['userId']
         ).first()
         clock_in_time = get_time_stamp(event)
         print(Attendance.objects.create(
@@ -97,7 +97,7 @@ class TimeManageAPIView(APIView):
         '''休憩終了'''
         print(' call break end')
         member = Member.objects.filter(
-            user=self.request.user
+            line_id__text=event['source']['userId']
         ).first()
         break_end_time = get_time_stamp(event)
         at = Attendance.objects.filter(
@@ -124,7 +124,7 @@ class TimeManageAPIView(APIView):
         '''退勤'''
         print(' call clock out')
         member = Member.objects.filter(
-            user=self.request.user
+            line_id__text=event['source']['userId']
         ).first()
         clock_out_time = get_time_stamp(event)
         at = Attendance.objects.filter(
@@ -149,7 +149,7 @@ class TimeManageAPIView(APIView):
         '''途中休憩開始'''
         print(' call break start')
         member = Member.objects.filter(
-            user=self.request.user
+            line_id__text=event['source']['userId']
         ).first()
         break_start_time = get_time_stamp(event)
         at = Attendance.objects.filter(
