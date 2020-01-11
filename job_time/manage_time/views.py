@@ -8,7 +8,7 @@ from job_time.auth import auth
 from job_time.manage_time.models import Attendance, Break, Member, LineID
 
 @auth
-def push(self, event, data, headers={}):
+def push(event, data, headers={}):
     data["to"] = event['source']['userId']
     URL = 'https://api.line.me/v2/bot/message/push'
     res = requests.post(URL, json=data, headers=headers)
@@ -39,11 +39,11 @@ class TimeManageAPIView(APIView):
             if event['postback']['data'] == 'clock_in':
                 return self.clock_in(event)
             elif event['postback']['data'] == 'break_end':
-                return self.temporary_clock_in(event)
+                return self.break_end(event)
             elif event['postback']['data'] == 'clock_out':
                 return self.clock_out(event)
             elif event['postback']['data'] == 'break_start':
-                return self.temporary_clock_out(event)
+                return self.break_start(event)
         return Response({})
 
     def follow(self, event):
