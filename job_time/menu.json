@@ -43,7 +43,7 @@
             "action": {
                 "type": "postback",
                 "label": "再出勤",
-                "data": "temporary_clock_in"
+                "data": "break_end"
             }
         },
         {
@@ -56,7 +56,7 @@
             "action": {
                 "type": "postback",
                 "label": "一時退勤",
-                "data": "temporary_clock_out"
+                "data": "break_start"
             }
         }
     ]

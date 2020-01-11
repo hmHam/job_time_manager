@@ -125,5 +125,3 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-LINE_ACCESS_TOKEN = 'DNZIGXOOFGDIBkHtgvm2zJbwSHy1PWLBUdskL28NgYLOZ+wqA/EluwmcJC9Tkn1B+z/TC+4yDpWfL2Mp2W3iSmeyf8PqEU2yj8kImxy7oWW1ZZkPOGb6OzLuJRSQFjjHAO43AG7Gv2YAkdniwLU0PAdB04t89/1O/w1cDnyilFU='
