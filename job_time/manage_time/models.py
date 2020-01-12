@@ -34,7 +34,7 @@ class Attendance(models.Model):
         return total.seconds / 60 if total is not None else 0
 
     def get_work_time(self):
-        brk_total_time = instance.get_break_total()
+        brk_total_time = self.get_break_total()
         work_time = self.clock_out_time - self.clock_in_time
         work_time = work_time.seconds / 60
         work_time -= brk_total_time
