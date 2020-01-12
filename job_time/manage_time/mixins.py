@@ -5,6 +5,9 @@ def get_time_stamp(event):
 
 
 class LineIDGetter(object):
+    def to_internal_value(self, data):
+        return data
+        
     def validate(self, event):
         event_datetime = get_time_stamp(event)
         return {
