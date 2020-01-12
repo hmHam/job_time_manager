@@ -137,6 +137,11 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
         model = Attendance
         fields = []
     
+    def validate(self, event):
+        data = super().validate(event)
+        self.instance = data['attendance']
+        return data
+        
     def update(self, instance, validated_data):
         print('clock out')
         instance.clock_out_time = validated_data['time']
