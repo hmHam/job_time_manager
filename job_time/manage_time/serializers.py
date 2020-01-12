@@ -100,7 +100,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         text = [text] + self.get_attendant_days(month_attendances)
         text += [
             '-' * 20,
-            '%d' % int(
+            ' ' * 15 + '%d' % int(
                 self.get_month_total(month_attendances)
             )
         ]
@@ -158,7 +158,7 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
                 F('end_time') - F('start_time'),
                 DateTimeField()
             )
-        ).aggregate(total=Sum('break_time'))
+        ).aggregate(total=Sum('break_time'))['total']
         work_time = instance.clock_out_time - instance.clock_in_time
         work_time -= brk_total_time
         Salary.objects.create(
