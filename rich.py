@@ -5,11 +5,11 @@ from pprint import pprint
 from argparse import ArgumentParser
 
 parser = ArgumentParser()
-parser.add_argument('--make-rich', nargs='?', const=True, default=False)
-parser.add_argument('--get-richs', nargs='?', const=True, default=False)
-parser.add_argument('--register-rich', default=False)
-parser.add_argument('--delete-rich', default=False)
-parser.add_argument('--upload-image', '-i', nargs=3, default=False)
+parser.add_argument('--make', nargs='?', const=True, default=False)
+parser.add_argument('--gets', nargs='?', const=True, default=False)
+parser.add_argument('--register', default=False)
+parser.add_argument('--delete', default=False)
+parser.add_argument('--image', '-i', nargs=3, default=False)
 
 
 @auth
@@ -43,16 +43,16 @@ def upload_rich(menu_id, content_type, image_path, headers={}):
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    if args.make_rich:
+    if args.make:
         pprint(make_rich().json())
-    if args.get_richs:
+    if args.gets:
         res = get_richs().json()
         menus = res['richmenus']
         print('count', len(menus))
         pprint(menus)
-    if args.register_rich:
-        pprint(register_rich(args.register_rich).json())
-    if args.delete_rich:
-        pprint(delete_rich(args.delete_rich).json())
-    if args.upload_image:
-        pprint(upload_rich(*args.upload_image).text)
+    if args.register:
+        pprint(register_rich(args.register).json())
+    if args.delete:
+        pprint(delete_rich(args.delete).json())
+    if args.image:
+        pprint(upload_rich(*args.image).text)

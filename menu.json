@@ -1,7 +1,7 @@
 {
     "size": {
-        "width": 800,
-        "height": 270
+        "width": 1200,
+        "height": 810
     },
     "selected": true,
     "name": "timeManage",
@@ -11,21 +11,20 @@
             "bounds": {
                 "x": 0,
                 "y": 0,
-                "width": 800,
-                "height": 50
+                "width": 1200,
+                "height": 10
             },
             "action": {
-                "type": "postback",
-                "label": "給与計算",
-                "data": "salary"
+                "type": "message",
+                "text": "bot explanation"
             }
         },
         {
             "bounds": {
                 "x": 0,
-                "y": 50,
+                "y": 10,
                 "width": 400,
-                "height": 135
+                "height": 400
             },
             "action": {
                 "type": "postback",
@@ -36,9 +35,9 @@
         {
             "bounds": {
                 "x": 400,
-                "y": 50,
+                "y": 10,
                 "width": 400,
-                "height": 135
+                "height": 400
             },
             "action": {
                 "type": "postback",
@@ -48,10 +47,22 @@
         },
         {
             "bounds": {
-                "x": 0,
-                "y": 160,
+                "x": 800,
+                "y": 10,
                 "width": 400,
-                "height": 135
+                "height": 400
+            },
+            "action": {
+                "type": "message",
+                "text": "bot explanation"
+            }
+        },
+        {
+            "bounds": {
+                "x": 0,
+                "y": 410,
+                "width": 400,
+                "height": 400
             },
             "action": {
                 "type": "postback",
@@ -62,14 +73,27 @@
         {
             "bounds": {
                 "x": 400,
-                "y": 160,
+                "y": 410,
                 "width": 400,
-                "height": 135
+                "height": 400
             },
             "action": {
                 "type": "postback",
                 "label": "一時退勤",
                 "data": "break_start"
+            }
+        },
+        {
+            "bounds": {
+                "x": 800,
+                "y": 410,
+                "width": 400,
+                "height": 400
+            },
+            "action": {
+                "type": "postback",
+                "label": "給与計算",
+                "data": "salary"
             }
         }
     ]
