@@ -125,8 +125,7 @@ class ClockInSerializer(MemberGetter, ModelSerializer):
 
     def to_representation(self, data):
         print('hoge')
-        return [
-            {
+        return [{
                 'type': 'text',
                 'text': 'おはようございます'
             }

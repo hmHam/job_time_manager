@@ -57,6 +57,7 @@ class TimeManageAPIView(APIView):
             serializer = self.get_serializer(event)
             print(serializer)
             serializer.is_valid(raise_exception=True)
+            print(serializer.data)
             return push(event, serializer.data)
         except ValidationError as e:
             print(e.detail)
