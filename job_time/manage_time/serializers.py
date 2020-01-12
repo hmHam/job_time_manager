@@ -179,7 +179,7 @@ class BreakStartSerializer(AttendanceGetterMixin, ModelSerializer):
         data = super().validate(event)
         # TODO: 前に作られた休憩モデルの終了時刻がセットされていない場合はエラー
         if Break.objects.filter(
-            date=data['date'],
+            attendance=data['attendance'],
             end_time__isnull=True
         ).exists():
             raise ValidationError("前回の休憩の終了が確認されていません")
