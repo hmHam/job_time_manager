@@ -24,7 +24,7 @@ class Attendance(models.Model):
     def __str__(self):
         return self.date.strftime('%Y年%m月%d日出勤')
   
-  
+
 class Salary(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = '日当'
@@ -34,7 +34,7 @@ class Salary(models.Model):
 
 class Break(models.Model):
     class Meata:
-        ordering = ['-start_time']
+        ordering = ['start_time']
     attendance = models.ForeignKey(Attendance, on_delete=models.PROTECT)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True)
