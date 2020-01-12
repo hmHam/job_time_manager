@@ -208,7 +208,7 @@ class BreakEndSerializer(AttendanceGetterMixin, ModelSerializer):
     def validate(self, event):
         data = super().validate(event)
         attendance = data['attendance']
-        print(attendance.values('start_time'))
+        print(attendance.break_set.values('start_time'))
         self.instance = attendance.break_set.first()
         print(self.instance)
         if self.instance is None or self.instance.end_time is not None:
