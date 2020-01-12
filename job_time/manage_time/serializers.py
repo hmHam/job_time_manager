@@ -186,10 +186,13 @@ class BreakStartSerializer(AttendanceGetterMixin, ModelSerializer):
         return data
     
     def create(self, validated_data):
-        return Break.objects.create(
-            attendance=validated_data['attendance'],
+        attendance = validated_data['attendance']
+        brk = Break.objects.create(
+            attendance=attendance,
             start_time=validated_data['time']
         )
+        attendance.break_set.add(brk)
+        return brk
 
     def to_representation(self, data):
         return {'messages': [
