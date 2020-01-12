@@ -46,7 +46,7 @@ class TimeManageAPIView(APIView):
         s = self.serializer_map.get(event['type'], SorrySerializer)
         if isinstance(s, dict):
             s = s['data'][event['postback']['data']]
-        return s
+        return s(data=event)
 
     def post(self, request, format=None):
         try:
