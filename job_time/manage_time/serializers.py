@@ -82,6 +82,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         month_salaries = Salary.objects.filter(
             date__month=attendant_month
         )
+        print(month_salaries)
         if not month_salaries.exists():
             if attendances.filter(clock_out_time__isnull=True).exists():
                 # 最新の出勤の退勤時刻が埋まっているかを確認
@@ -100,7 +101,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         text = [text] + self.get_attendant_days(month_attendances)
         text += [
             '-' * 20,
-            ' ' * 15 + '%d' % int(
+            ' ' * 18 + '¥%d' % int(
                 self.get_month_total(month_attendances)
             )
         ]
