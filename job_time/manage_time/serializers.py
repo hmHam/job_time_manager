@@ -27,12 +27,12 @@ class CacheLineIDSerializer(LineIDGetter, Serializer):
 
 class SorrySerializer(LineIDGetter, Serializer):
     def to_representation(self, data):
-        return [
+        return {'messages': [
             {
                 'type': 'text',
                 'text': '対応していないアクションです'
             },
-        ]
+        ]}
 
 class FollowSerializer(LineIDGetter, ModelSerializer):
     class Meta:
@@ -51,12 +51,12 @@ class FollowSerializer(LineIDGetter, ModelSerializer):
         )
 
     def to_representation(self, data):
-        return [
+        return {'messages': [
             {
                 'type': 'text',
                 'text': '%sを作成しました' % self.validated_data['line_id']
             },
-        ]
+        ]}
 
 class SalarySerializer(MemberGetter, ModelSerializer):
     '''今月の給料を出力して返信'''
@@ -74,7 +74,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
 
     def get_attendant_days(self, attendances):
         return [
-            '%d日' % at for at in month_attendances.values_list('date__day', flat=True)
+            '%d日' % at for at in attendances.values_list('date__day', flat=True)
         ]
 
     def get_month_total(self, attendances):
@@ -102,12 +102,12 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         return "\n".join(text)
 
     def to_representation(self, data):
-        return [
+        return {'messages': [
             {
                 'type': 'text',
                 'text': self.month_salary_report()
             }
-        ]
+        ]}
 
 
 class ClockInSerializer(MemberGetter, ModelSerializer):
@@ -125,11 +125,11 @@ class ClockInSerializer(MemberGetter, ModelSerializer):
 
     def to_representation(self, data):
         print('hoge')
-        return [{
+        return {'messages': [{
                 'type': 'text',
                 'text': 'おはようございます'
             }
-        ]
+        ]}
 
 
 class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
@@ -157,12 +157,12 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
         return instance
 
     def to_representation(self, data):
-        return [
+        return {'messages': [
             {
                 'type': 'text',
                 'text': 'お疲れ様でした'
             }
-        ]
+        ]}
 
 
 class BreakStartSerializer(AttendanceGetterMixin, ModelSerializer):
@@ -187,12 +187,12 @@ class BreakStartSerializer(AttendanceGetterMixin, ModelSerializer):
         )
 
     def to_representation(self, data):
-        return [
+        return {'messages': [
             {
                 'type': 'text',
                 'text': 'いってらっしゃいませ'
             }
-        ]
+        ]}
         
 
 class BreakEndSerializer(AttendanceGetterMixin, ModelSerializer):
@@ -214,10 +214,10 @@ class BreakEndSerializer(AttendanceGetterMixin, ModelSerializer):
         return instance
 
     def to_representation(self, data):
-        return [
+        return {'messages': [
             {
                 'type': 'text',
                 'text': 'おかえりなさいませ'
             }
-        ]
+        ]}
         

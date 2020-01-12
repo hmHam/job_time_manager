@@ -15,9 +15,7 @@ from job_time.manage_time.serializers import (
 )
 
 @auth
-def push(event, messages, options={}, headers={}):
-    data = {}
-    data['messages'] = messages
+def push(event, data, options={}, headers={}):
     data["to"] = event['source']['userId']
     print(data)
     URL = 'https://api.line.me/v2/bot/message/push'
@@ -61,11 +59,15 @@ class TimeManageAPIView(APIView):
             return push(event, serializer.data)
         except ValidationError as e:
             print(e.detail)
-            return push(event, [
+            return push(event, 
                 {
-                    'type': 'text',
-                    'text': str(e)
+                    'messages': [
+                        {
+                            'type': 'text',
+                            'text': str(e)
+                        }
+                    ]
                 }
-            ])
+            )
         return Response({'detail': 'その他'})
 
