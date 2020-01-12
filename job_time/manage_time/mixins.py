@@ -1,4 +1,6 @@
 from datetime import datetime
+from rest_framework.exceptions import ValidationError
+from job_time.manage_time.models import Attendance, Member
 
 def get_time_stamp(event):
     return datetime.fromtimestamp(event['timestamp'] // 1000)
@@ -7,7 +9,7 @@ def get_time_stamp(event):
 class LineIDGetter(object):
     def to_internal_value(self, data):
         return data
-        
+
     def validate(self, event):
         event_datetime = get_time_stamp(event)
         return {
