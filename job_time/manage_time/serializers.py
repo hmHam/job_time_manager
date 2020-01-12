@@ -161,7 +161,7 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
             )
         ).aggregate(total=Sum('break_time'))['total']
         work_time = instance.clock_out_time - instance.clock_in_time
-        work_time -= brk_total_time
+        work_time -= brk_total_time.seconds // 60
         Salary.objects.create(
             date=instance.date,
             money=validated_data['member'].hourly_wage * work_time
