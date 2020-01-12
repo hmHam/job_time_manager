@@ -123,7 +123,7 @@ class ClockInSerializer(MemberGetter, ModelSerializer):
             member=validated_data['member']
         )
 
-   def to_representation(self, data):
+    def to_representation(self, data):
         print('hoge')
         return [
             {
