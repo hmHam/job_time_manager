@@ -3,7 +3,6 @@ from rest_framework import serializers
 from django.db.models import Sum
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth.models import User
-from django.db.models import DateTimeField, ExpressionWrapper, F
 from job_time.manage_time.models import (
     Attendance,
     Break,
