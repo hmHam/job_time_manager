@@ -149,17 +149,21 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
         self.instance = data['attendance']
         return data
 
-    def update(self, instance, validated_data):
-        print('clock out')
-        instance.clock_out_time = validated_data['time']
-        instance.save()
-        # さらに当日の給料を計算する
-        brk_total_time = instance.break_set.annotate(
+    def get_break_total(self, instance):
+        total = instance.break_set.annotate(
             break_time=ExpressionWrapper(
                 F('end_time') - F('start_time'),
                 DateTimeField()
             )
         ).aggregate(total=Sum('break_time'))['total']
+        return total if total is not None else 0
+        
+    def update(self, instance, validated_data):
+        print('clock out')
+        instance.clock_out_time = validated_data['time']
+        instance.save()
+        # さらに当日の給料を計算する
+        brk_total_time = self.get_break_total(instance)
         work_time = instance.clock_out_time - instance.clock_in_time
         work_time -= brk_total_time.seconds // 60
         Salary.objects.create(
