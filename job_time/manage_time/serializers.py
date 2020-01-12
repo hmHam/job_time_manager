@@ -74,7 +74,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
 
     def get_attendant_days(self, attendances):
         return [
-            '%d日' % at for at in attendances.values_list('date__day', flat=True)
+            '{}: {}時間'.format(at.date.strftime('%d日'), at.get_work_time()) % at for at in attendances.all()
         ]
 
     def get_month_total(self, attendances):
@@ -149,24 +149,12 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
         self.instance = data['attendance']
         return data
 
-    def get_break_total(self, instance):
-        total = instance.break_set.annotate(
-            break_time=ExpressionWrapper(
-                F('end_time') - F('start_time'),
-                DateTimeField()
-            )
-        ).aggregate(total=Sum('break_time'))['total']
-        return total.seconds // 60 if total is not None else 0
-
     def update(self, instance, validated_data):
         print('clock out')
         instance.clock_out_time = validated_data['time']
         instance.save()
         # さらに当日の給料を計算する
-        brk_total_time = self.get_break_total(instance)
-        work_time = instance.clock_out_time - instance.clock_in_time
-        work_time = work_time.seconds // 60
-        work_time -= brk_total_time
+        work_time = instance.get_work_time()
         Salary.objects.create(
             date=instance.date,
             money=validated_data['member'].hourly_wage * work_time

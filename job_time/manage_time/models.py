@@ -23,6 +23,22 @@ class Attendance(models.Model):
     clock_out_time = models.DateTimeField(null=True)
     def __str__(self):
         return self.date.strftime('%Y年%m月%d日出勤')
+    
+    def get_break_total(self):
+        total = self.break_set.annotate(
+            break_time=ExpressionWrapper(
+                F('end_time') - F('start_time'),
+                DateTimeField()
+            )
+        ).aggregate(total=Sum('break_time'))['total']
+        return total.seconds // 60 if total is not None else 0
+
+    def get_work_time(self):
+        brk_total_time = instance.get_break_total()
+        work_time = self.clock_out_time - self.clock_in_time
+        work_time = work_time.seconds // 60
+        work_time -= brk_total_time
+        return work_time
   
   
 class Salary(models.Model):
