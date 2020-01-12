@@ -61,7 +61,7 @@ class TimeManageAPIView(APIView):
             return push(event, [
                 {
                     'type': 'text',
-                    'text': e.detail
+                    'text': str(e)
                 }
             ])
         return Response({'detail': 'その他'})
