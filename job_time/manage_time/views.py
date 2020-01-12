@@ -59,8 +59,7 @@ class TimeManageAPIView(APIView):
             return push(event, serializer.data)
         except ValidationError as e:
             print(e.detail)
-            print(e.title())
-            detail = e.detail[0] if isinstance(e.detail, list) else e.detail
+            detail = e.detail['non_field_errors'][0] if 'non_field_errors' in e.detail else e.detail[0]
             return push(event, 
                 {
                     'messages': [
