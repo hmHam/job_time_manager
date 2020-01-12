@@ -19,7 +19,7 @@ from job_time.manage_time.mixins import (
 
 class CacheLineIDSerializer(LineIDGetter, Serializer):
     def cache(self):
-        userId = self.validate_data['line_id']
+        userId = self.validated_data['line_id']
         line_id = LineID.objects.filter(text=userId).first()
         if line_id is None:
             return LineID.objects.create(text=userId)
