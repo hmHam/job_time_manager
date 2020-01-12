@@ -87,18 +87,15 @@ class SalarySerializer(MemberGetter, ModelSerializer):
             date=self.validated_data['date'].strftime('%Y/%m/%d')
         )
         month_attendances = self.get_month_attendances()
-        text = [text].extend(
-            self.get_attendant_days(month_attendances)
-        ).extend(
-            [
-                '-' * 20,
-                '%d' % int(
-                    self.get_month_total(month_attendances)
-                )
-            ]
-        ).extend(
-            ['-' * 20]
-        )
+        print(month_attendances)
+        text = [text] + self.get_attendant_days(month_attendances)
+        text += [
+            '-' * 20,
+            '%d' % int(
+                self.get_month_total(month_attendances)
+            )
+        ]
+        text += ['-' * 20]
         return "\n".join(text)
 
     def to_representation(self, data):
