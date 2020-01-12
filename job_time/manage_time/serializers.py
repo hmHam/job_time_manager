@@ -83,7 +83,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
             date__month=attendant_month
         )
         if not month_salaries.exists():
-            if attendances.filter(clock_in_time__isnull=True).exists():
+            if attendances.filter(clock_out_time__isnull=True).exists():
                 # 最新の出勤の退勤時刻が埋まっているかを確認
                 raise ValidationError("未退勤の出勤があります")
             return 0
