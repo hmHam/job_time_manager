@@ -209,7 +209,7 @@ class BreakEndSerializer(AttendanceGetterMixin, ModelSerializer):
         data = super().validate(event)
         attendance = data['attendance']
         print(attendance.break_set.values('start_time'))
-        self.instance = attendance.break_set.first()
+        self.instance = attendance.break_set.last()
         print(self.instance)
         if self.instance is None or self.instance.end_time is not None:
             raise ValidationError("本日の休憩開始が確認されていません")

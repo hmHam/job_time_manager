@@ -34,7 +34,7 @@ class Salary(models.Model):
 
 class Break(models.Model):
     class Meata:
-        ordering = ['start_time']
+        ordering = ['-start_time']
     attendance = models.ForeignKey(Attendance, on_delete=models.PROTECT)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True)
