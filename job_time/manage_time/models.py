@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Sum
 from django.contrib.auth.models import User
-from django.db.models import DateTimeField, ExpressionWrapper, F
+from django.db.models import DurationField, ExpressionWrapper, F
 
 
 class LineID(models.Model):
@@ -31,7 +31,7 @@ class Attendance(models.Model):
         total = self.break_set.annotate(
             break_time=ExpressionWrapper(
                 F('end_time') - F('start_time'),
-                DateTimeField()
+                output_field=DurationField()
             )
         ).aggregate(total=Sum('break_time'))['total']
         return total.seconds / 60 if total is not None else 0
