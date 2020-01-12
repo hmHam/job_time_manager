@@ -64,7 +64,7 @@ class TimeManageAPIView(APIView):
                     'messages': [
                         {
                             'type': 'text',
-                            'text': e.detail.title()
+                            'text': e.detail[0].title()
                         }
                     ]
                 }
