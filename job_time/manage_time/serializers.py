@@ -141,7 +141,7 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
         data = super().validate(event)
         self.instance = data['attendance']
         return data
-        
+
     def update(self, instance, validated_data):
         print('clock out')
         instance.clock_out_time = validated_data['time']
@@ -214,7 +214,7 @@ class BreakEndSerializer(AttendanceGetterMixin, ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        instance.end_time = validated_data['break_end_time']
+        instance.end_time = validated_data['time']
         instance.save()
         return instance
 
