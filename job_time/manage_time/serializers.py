@@ -92,7 +92,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         
 
     def month_salary_report(self):
-        text = '{padding} 今月({date})の給与 {padding}'.format(
+        text = '{padding} \n今月({date})の給与\n {padding}'.format(
             padding='-' * 5,
             date=self.validated_data['date'].strftime('%Y/%m/%d')
         )
@@ -101,7 +101,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         text = [text] + self.get_attendant_days(month_attendances)
         text += [
             '-' * 20,
-            ' ' * 18 + '¥%d' % int(
+            ' ' * 20 + '¥%d' % int(
                 self.get_month_total(month_attendances)
             )
         ]
