@@ -31,12 +31,12 @@ class Attendance(models.Model):
                 DateTimeField()
             )
         ).aggregate(total=Sum('break_time'))['total']
-        return total.seconds // 60 if total is not None else 0
+        return total.seconds / 60 if total is not None else 0
 
     def get_work_time(self):
         brk_total_time = instance.get_break_total()
         work_time = self.clock_out_time - self.clock_in_time
-        work_time = work_time.seconds // 60
+        work_time = work_time.seconds / 60
         work_time -= brk_total_time
         return work_time
   
@@ -45,7 +45,7 @@ class Salary(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = '日当'
     date = models.DateField(unique=True)
-    money = models.PositiveIntegerField(verbose_name='金額')
+    money = models.FloatField(verbose_name='金額')
 
 
 class Break(models.Model):
