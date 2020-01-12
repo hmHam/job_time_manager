@@ -53,6 +53,7 @@ class TimeManageAPIView(APIView):
             event = self.request.data['events'][0]
             self.cache_line_id(event)
             serializer = self.get_serializer(event)
+            print(serializer)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return push(event, serializer.data)

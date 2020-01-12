@@ -170,7 +170,7 @@ class BreakStartSerializer(AttendanceGetterMixin, ModelSerializer):
         model = Break
         fields = []
     
-    def validte(self, event):
+    def validate(self, event):
         data = super().validate(event)
         # TODO: 前に作られた休憩モデルの終了時刻がセットされていない場合はエラー
         if Break.objects.filter(
@@ -200,7 +200,7 @@ class BreakEndSerializer(AttendanceGetterMixin, ModelSerializer):
         model = Break
         fields = []
     
-    def validte(self, event):
+    def validate(self, event):
         data = super().validate(event)
         attendance = data['attendance']
         self.instance = attendance.break_set.first()
