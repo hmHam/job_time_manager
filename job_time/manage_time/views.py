@@ -18,6 +18,7 @@ def push(event, messages, options={}, headers={}):
     data = {}
     data['messages'] = messages
     data["to"] = event['source']['userId']
+    print(data)
     URL = 'https://api.line.me/v2/bot/message/push'
     res = requests.post(URL, json=data, headers=headers)
     print(res.json())
