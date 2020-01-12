@@ -78,8 +78,17 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         ]
 
     def get_month_total(self, attendances):
-        return attendances.aggregate(salary=Sum('salary__money'))['salary']
-
+        attendant_month = attendances.first().date.month
+        month_salaries = Salary.objects.filter(
+            date__month=attendant_month
+        )
+        if not month_salaries.exists():
+            if attendances.filter(clock_in_time__isnull=True).exists():
+                # 最新の出勤の退勤時刻が埋まっているかを確認
+                raise ValidationError("未退勤の出勤があります")
+            return 0
+        return month_salaries.aggregate(total=Sum('money'))['total']
+        
 
     def month_salary_report(self):
         text = '{padding} 今月({date})の給与 {padding}'.format(

@@ -24,7 +24,7 @@ class Attendance(models.Model):
     def __str__(self):
         return self.date.strftime('%Y年%m月%d日出勤')
   
-
+  
 class Salary(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = '日当'
