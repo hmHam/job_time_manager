@@ -156,8 +156,8 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
                 DateTimeField()
             )
         ).aggregate(total=Sum('break_time'))['total']
-        return total if total is not None else 0
-        
+        return total.seconds // 60 if total is not None else 0
+
     def update(self, instance, validated_data):
         print('clock out')
         instance.clock_out_time = validated_data['time']
@@ -165,7 +165,7 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
         # さらに当日の給料を計算する
         brk_total_time = self.get_break_total(instance)
         work_time = instance.clock_out_time - instance.clock_in_time
-        work_time -= brk_total_time.seconds // 60
+        work_time -= brk_total_time
         Salary.objects.create(
             date=instance.date,
             money=validated_data['member'].hourly_wage * work_time
