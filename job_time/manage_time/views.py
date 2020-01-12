@@ -58,13 +58,13 @@ class TimeManageAPIView(APIView):
             serializer.save()
             return push(event, serializer.data)
         except ValidationError as e:
-            print(e.detail)
+            detail = e.detail[0] if isinstance(e.detail, list) else e.detail
             return push(event, 
                 {
                     'messages': [
                         {
                             'type': 'text',
-                            'text': e.detail[0].title()
+                            'text': detail.title()
                         }
                     ]
                 }
