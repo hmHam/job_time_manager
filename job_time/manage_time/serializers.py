@@ -186,13 +186,10 @@ class BreakStartSerializer(AttendanceGetterMixin, ModelSerializer):
         return data
     
     def create(self, validated_data):
-        attendance = validated_data['attendance']
-        brk = Break.objects.create(
-            attendance=attendance,
+        return Break.objects.create(
+            attendance=validated_data['attendance'],
             start_time=validated_data['time']
         )
-        attendance.break_set.add(brk)
-        return brk
 
     def to_representation(self, data):
         return {'messages': [
@@ -211,7 +208,9 @@ class BreakEndSerializer(AttendanceGetterMixin, ModelSerializer):
     def validate(self, event):
         data = super().validate(event)
         attendance = data['attendance']
+        print(attendance.values('start_time'))
         self.instance = attendance.break_set.first()
+        print(self.instance)
         if self.instance is None or self.instance.end_time is not None:
             raise ValidationError("本日の休憩開始が確認されていません")
         return data
