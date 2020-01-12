@@ -1,4 +1,3 @@
-from datetime import datetime
 import requests
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound, ValidationError
