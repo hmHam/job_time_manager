@@ -50,22 +50,29 @@ class ProfileView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'prof.html'
 
+    def get_member(self):
+        return Member.objects.filter(
+            line_id__text=self.request.data['line_id']
+        ).first()
+
     def get(self, request):
-        serializer = MemberSerializer(data=request.data)
+        member = self.get_member()
+        serializer = MemberSerializer(member)
         return Response({
             'serializer': serializer,
-            'member': serializer.validated_data['member']
+            'member': member
         })
 
     def post(self, request):
-        serializer = MemberSerializer(data=request.data)
+        member = self.get_member()
+        serializer = MemberSerializer(member, data=request.data)
         if not serializer.is_valid():
             return Response({
                 'serializer': serializer,
                 'member': serializer.validated_data['member']
             })
         serializer.save()
-        return push(event, )
+        return push(event, serializer.data)
 
 
 class TimeManageAPIView(LineMessageWebhookMixin, APIView):

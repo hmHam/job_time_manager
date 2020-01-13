@@ -43,19 +43,18 @@ class MemberSerializer(MemberGetter, ModelSerializer):
             'name',
             'hourly_wage',
         ]
-
-    def validate(self, data):
-        member = Member.objects.filter(
-            line_id__text=self.initial_data['line_id']
-        ).first()
-        return {
-            'member': member
-        }
     
     def save(self, **kwargs):
         self.instance = self.validated_data['member']
         super().save(**kwargs)
-
+    
+    def to_representation(self, data):
+        return {'messages': [
+            {
+                'type': 'text',
+                'text': 'アカウント情報を編集しました'
+            }
+        ]}
 
 class FollowSerializer(LineIDGetter, ModelSerializer):
     class Meta:
