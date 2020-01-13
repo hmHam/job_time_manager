@@ -12,7 +12,32 @@ from job_time.manage_time.serializers import (
     BreakEndSerializer,
     SorrySerializer,
     SalarySerializer,
+    MemberSerializer,
 )
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from rest_framework.renderers import TemplateHTMLRenderer
+
+
+class ProfileView(APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'prof.html'
+
+    def get(self, request, pk):
+        profile = get_object_or_404(Member, pk=pk)
+        serializer = MemberSerializer(profile)
+        return Response({'serializer': serializer, 'member': profile})
+
+    def post(self, request, pk):
+        profile = get_object_or_404(Member, pk=pk)
+        serializer = MemberSerializer(profile, data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer, 'member': profile})
+        serializer.save()
+        return redirect('profile')
 
 @auth
 def push(event, data, options={}, headers={}):
@@ -71,4 +96,5 @@ class TimeManageAPIView(APIView):
                 }
             )
         return Response({'detail': 'その他'})
+
 

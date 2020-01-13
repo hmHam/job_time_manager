@@ -19,5 +19,6 @@ from job_time.manage_time import views
 
 urlpatterns = [
     path('', views.TimeManageAPIView.as_view()),
+    path('profile', views.ProfileView.as_view(), name='profile'),
     path('admin/', admin.site.urls),
 ]

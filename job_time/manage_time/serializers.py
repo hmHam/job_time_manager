@@ -1,6 +1,8 @@
+from os import path
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework import serializers
 from django.db.models import Sum
+from django.conf import settings
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth.models import User
 from job_time.manage_time.models import (
@@ -24,6 +26,7 @@ class CacheLineIDSerializer(LineIDGetter, Serializer):
             return LineID.objects.create(text=userId)
         return line_id
 
+
 class SorrySerializer(LineIDGetter, Serializer):
     def to_representation(self, data):
         return {'messages': [
@@ -32,6 +35,16 @@ class SorrySerializer(LineIDGetter, Serializer):
                 'text': '対応していないアクションです'
             },
         ]}
+
+
+class MemberSerializer(ModelSerializer):
+    class Meta:
+        model = Member
+        fields = [
+            'name',
+            'hourly_wage',
+        ]
+    
 
 class FollowSerializer(LineIDGetter, ModelSerializer):
     class Meta:
@@ -52,9 +65,23 @@ class FollowSerializer(LineIDGetter, ModelSerializer):
     def to_representation(self, data):
         return {'messages': [
             {
-                'type': 'text',
-                'text': '%sを作成しました' % self.validated_data['line_id']
-            },
+                'type': 'template',
+                'altText': 'This is template',
+                'template': {
+                    'type': 'buttons',
+                    'text': '''
+                    フォローありがとうございます、アカウントを作成しました!!
+                    詳細情報を設定する場合は、以下のボタンを押してください
+                    ''',
+                    'actions': [
+                        {
+                            'type': 'uri',
+                            'label': '設定',
+                            'uri': path.join(settings.HOST_URL, 'profile')
+                        }
+                    ]
+                }
+            }
         ]}
 
 class SalarySerializer(MemberGetter, ModelSerializer):
@@ -74,14 +101,24 @@ class SalarySerializer(MemberGetter, ModelSerializer):
     def get_attendant_days(self, attendances):
         attendances = attendances.order_by('clock_in_time')
         days = [
-            '{}: {:.1f}時間'.format(
-                at.date.strftime('%-d日'),
+            (
+                at.date.day,
                 at.get_work_time()
             ) for at in attendances
         ]
         if len(days) == 0:
             return ['今月の出勤日はありません']
-        return days
+        days_report = []
+        total_work_hour = 0
+        for day in days:
+            days_report.append(
+                '{}日: {.1f}時間'.format(*day)
+            )
+            total_work_hour += day[1]
+        days_report.append(
+            '総労働時間: {.1f}'.format(total_work_hour)
+        )
+        return days_report
 
     def get_month_total(self, attendances):
         if not attendances.exists():
@@ -114,7 +151,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
             )
         ]
         text += ['-' * 20]
-        text += ['時給{:,}円で計算しています'.format(
+        text += ['時給{:,}円で計算'.format(
             self.validated_data['member'].hourly_wage
         )]
         return "\n".join(text)
