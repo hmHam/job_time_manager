@@ -100,7 +100,7 @@ class TimeManageAPIView(LineMessageWebhookMixin, APIView):
         except ValidationError as e:
             print(e.detail)
             detail = e.detail['non_field_errors'][0] if 'non_field_errors' in e.detail else e.detail[0]
-            return push(event, 
+            return push(self.event, 
                 {
                     'messages': [
                         {
