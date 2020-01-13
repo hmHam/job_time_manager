@@ -22,7 +22,7 @@ class Member(models.Model):
 class Salary(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = '日当'
-    attendance = models.ForeignKey('Attendance', on_delete=models.CASCADE)
+    attendance = models.ForeignKey('Attendance', on_delete=models.CASCADE, unique=True)
     money = models.FloatField(verbose_name='金額')
 
 
@@ -60,10 +60,14 @@ class Attendance(models.Model):
         if self.clock_out_time is not None:
             # 終了時刻が入力された際は当日の給料を計算して保存
             work_time = self.get_work_time()
-            Salary.objects.create(
-                attendance=self,
-                money=self.member.hourly_wage * work_time
-            )
+            related_salary = Salary.objects.filter(attendance=self).first()
+            if related_salary is None:
+                related_salary = Salary.objects.create(
+                    attendance=self,
+                    money=0
+                )
+            related_salary.money = self.member.hourly_wage * work_time
+            related_salary.save()
         return self
 
 class Break(models.Model):
