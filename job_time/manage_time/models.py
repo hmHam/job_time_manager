@@ -53,7 +53,7 @@ class Attendance(models.Model):
         work_time = work_time.seconds
         work_time -= brk_total_time
         # secondsなのでhourに変換
-        return work_time // 3600
+        return work_time / 3600
     
     def save(self, **kwargs):
         super().save(**kwargs)
