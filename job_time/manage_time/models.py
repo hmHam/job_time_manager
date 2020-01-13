@@ -18,6 +18,14 @@ class Member(models.Model):
     def __str__(self):
         return '{}: {}'.format(self.name, self.line_id.text)
 
+  
+class Salary(models.Model):
+    class Meta:
+        verbose_name = verbose_name_plural = '日当'
+    attendance = models.ForeignKey('Attendance', on_delete=models.CASCADE)
+    money = models.FloatField(verbose_name='金額')
+
+
 # Create your models here.
 class Attendance(models.Model):
     member = models.ForeignKey(Member, on_delete=models.PROTECT)
@@ -34,22 +42,27 @@ class Attendance(models.Model):
                 output_field=DurationField()
             )
         ).aggregate(total=Sum('break_time'))['total']
-        return total.seconds / 60 if total is not None else 0
+        return total.seconds if total is not None else 0
 
     def get_work_time(self):
+        # hourで計算
         brk_total_time = self.get_break_total()
         work_time = self.clock_out_time - self.clock_in_time
-        work_time = work_time.seconds / 60
+        work_time = work_time.seconds
         work_time -= brk_total_time
-        return work_time
-  
-  
-class Salary(models.Model):
-    class Meta:
-        verbose_name = verbose_name_plural = '日当'
-    date = models.DateField(unique=True)
-    money = models.FloatField(verbose_name='金額')
-
+        # secondsなのでhourに変換
+        return work_time // 3600
+    
+    def save(self):
+        instance = super().save()
+        if instance.end_time is not None:
+            # 終了時刻が入力された際は当日の給料を計算して保存
+            work_time = instance.get_work_time()
+            Salary.objects.create(
+                attendance=instance,
+                money=instance.member.hourly_wage * work_time
+            )
+        return instance
 
 class Break(models.Model):
     class Meata:
@@ -57,6 +70,7 @@ class Break(models.Model):
     attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True)
+    
     def __str__(self):
         return '{}　休憩 {}'.format(
             self.attendance.date.strftime('%Y年%m月%d日'),

@@ -73,13 +73,13 @@ class SalarySerializer(MemberGetter, ModelSerializer):
 
     def get_attendant_days(self, attendances):
         return [
-            '{}: {}時間'.format(at.date.strftime('%d日'), at.get_work_time()) for at in attendances.all()
+            '{}: {:.1f}時間'.format(at.date.strftime('%d日'), at.get_work_time()) for at in attendances.all()
         ]
 
     def get_month_total(self, attendances):
         attendant_month = attendances.first().date.month
         month_salaries = Salary.objects.filter(
-            date__month=attendant_month
+            attendance__in=attendances.values_list('id', flat=True),
         )
         print(month_salaries)
         if not month_salaries.exists():
@@ -100,7 +100,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         text = [text] + self.get_attendant_days(month_attendances)
         text += [
             '-' * 20,
-            ' ' * 20 + '¥%d' % int(
+            '¥{:>20}'.format(
                 self.get_month_total(month_attendances)
             )
         ]
@@ -152,12 +152,6 @@ class ClockOutSerializer(AttendanceGetterMixin, ModelSerializer):
         print('clock out')
         instance.clock_out_time = validated_data['time']
         instance.save()
-        # さらに当日の給料を計算する
-        work_time = instance.get_work_time()
-        Salary.objects.create(
-            date=instance.date,
-            money=validated_data['member'].hourly_wage * work_time
-        )
         return instance
 
     def to_representation(self, data):
