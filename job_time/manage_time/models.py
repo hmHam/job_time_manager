@@ -55,8 +55,8 @@ class Attendance(models.Model):
         # secondsなのでhourに変換
         return work_time // 3600
     
-    def save(self):
-        instance = super().save()
+    def save(self, **kwargs):
+        instance = super().save(**kwargs)
         if instance.end_time is not None:
             # 終了時刻が入力された際は当日の給料を計算して保存
             work_time = instance.get_work_time()
