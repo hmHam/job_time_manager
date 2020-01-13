@@ -119,7 +119,7 @@ class SalarySerializer(MemberGetter, Serializer):
         if not attendances.exists():
             return 0
         attendant_month = attendances.first().date.month
-        wage = self.member.hourly_wage
+        wage = self.validated_data['member'].hourly_wage
         total_work_time = attendances.aggregate(
             total_work_time=Sum('work_time')
         )['total_work_time']
