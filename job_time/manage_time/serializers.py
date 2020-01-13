@@ -72,7 +72,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         )
 
     def get_attendant_days(self, attendances):
-        attendances = attendances.order_by('-clock_in_time')
+        attendances = attendances.order_by('clock_in_time')
         days = [
             '{}: {:.1f}時間'.format(
                 at.date.strftime('%-d日'),
