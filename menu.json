@@ -54,7 +54,7 @@
             },
             "action": {
                 "type": "message",
-                "text": "bot explanation"
+                "text": "出退勤と給与計算を行うためのボットです"
             }
         },
         {

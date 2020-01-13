@@ -69,9 +69,9 @@ class FollowSerializer(LineIDGetter, ModelSerializer):
                 'template': {
                     'type': 'buttons',
                     'text': '''
-                    フォローありがとうございます、アカウントを作成しました!!
+                    フォローありがとうございます、{}を作成しました!!
                     詳細情報を設定する場合は、以下のボタンを押してください
-                    ''',
+                    '''.format(self.validated_data['line_id']),
                     'actions': [
                         {
                             'type': 'uri',
