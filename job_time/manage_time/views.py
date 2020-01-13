@@ -33,6 +33,7 @@ def push(event, data, options={}, headers={}):
 
 class LineMessageWebhookMixin(object):
     def get_event(self):
+        print(self.reqest.data)
         event = self.request.data['events'][0]
         self.cache_line_id(event)
         return event
@@ -91,7 +92,7 @@ class TimeManageAPIView(LineMessageWebhookMixin, APIView):
     def post(self, request, format=None):
         try:
             self.event = self.get_event()
-            serializer = self.get_serializer(event)
+            serializer = self.get_serializer(self.event)
             print(serializer)
             serializer.is_valid(raise_exception=True)
             serializer.save()
