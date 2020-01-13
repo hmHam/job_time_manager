@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from rest_framework.renderers import TemplateHTMLRenderer
 from job_time.auth import auth
 from job_time.manage_time.serializers import (
