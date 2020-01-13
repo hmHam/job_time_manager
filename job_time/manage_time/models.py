@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Sum
+from django.utils.timezone import timedelta
 from django.contrib.auth.models import User
 from django.db.models import DurationField, ExpressionWrapper, F
 
@@ -39,7 +40,7 @@ class Attendance(models.Model):
                 output_field=DurationField()
             )
         ).aggregate(total=Sum('break_time'))['total']
-        return total if total is not None else 0
+        return total if total is not None else timedelta(0, 0)
 
     def get_work_time(self):
         brk_total_time = self.get_break_total()
