@@ -56,6 +56,7 @@ class ProfileView(APIView):
         ).first()
 
     def get(self, request):
+        print(request.query_params)
         member = self.get_member()
         serializer = MemberSerializer(member)
         return Response({
