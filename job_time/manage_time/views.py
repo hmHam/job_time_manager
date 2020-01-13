@@ -96,7 +96,7 @@ class TimeManageAPIView(LineMessageWebhookMixin, APIView):
             print(serializer)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return push(event, serializer.data)
+            return push(self.event, serializer.data)
         except ValidationError as e:
             print(e.detail)
             detail = e.detail['non_field_errors'][0] if 'non_field_errors' in e.detail else e.detail[0]
