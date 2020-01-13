@@ -74,10 +74,12 @@ class ProfileView(APIView):
             print(serializer, 'serializer')
             return Response({
                 'serializer': serializer,
-                'member': serializer.validated_data['member']
+                'member': member
             })
         serializer.save()
-        return push({}, serializer.data, options={'to': member.line_id.text})
+        res = push({}, serializer.data, options={'to': member.line_id.text})
+        res.data = {'serializer': serializer, 'member': member}
+        return res
 
 
 class TimeManageAPIView(LineMessageWebhookMixin, APIView):
