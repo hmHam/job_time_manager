@@ -52,7 +52,7 @@ class ProfileView(APIView):
 
     def get_member(self):
         return Member.objects.filter(
-            line_id__text=self.request.data['line_id']
+            line_id__text=self.request.query_params['line_id']
         ).first()
 
     def get(self, request):
