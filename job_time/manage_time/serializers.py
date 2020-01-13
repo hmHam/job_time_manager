@@ -44,10 +44,6 @@ class MemberSerializer(MemberGetter, ModelSerializer):
             'hourly_wage',
         ]
     
-    def save(self, **kwargs):
-        self.instance = self.validated_data['member']
-        super().save(**kwargs)
-    
     def to_representation(self, data):
         return {'messages': [
             {
