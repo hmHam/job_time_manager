@@ -2,6 +2,7 @@ import requests
 from job_time.auth import auth
 import json
 from pprint import pprint
+import sys
 from argparse import ArgumentParser
 
 parser = ArgumentParser()
@@ -10,7 +11,7 @@ parser.add_argument('--gets', nargs='?', const=True, default=False)
 parser.add_argument('--register', default=False)
 parser.add_argument('--delete', default=False)
 parser.add_argument('--image', '-i', nargs=3, default=False)
-
+parser.add_argument('--all', nargs='?', const=True, default=False)
 
 @auth
 def make_rich(headers={}):
@@ -43,6 +44,11 @@ def upload_rich(menu_id, content_type, image_path, headers={}):
 
 if __name__ == '__main__':
     args = parser.parse_args()
+    if args.all:
+        menu_id = make_rich().json()['richMenuId']
+        upload_rich(menu_id, 'image/png', 'menu.png')
+        register_rich(menu_id)
+        sys.exit(0)
     if args.make:
         pprint(make_rich().json())
     if args.gets:

@@ -33,7 +33,7 @@ def push(event, data, options={}, headers={}):
 
 class LineMessageWebhookMixin(object):
     def get_event(self):
-        print(self.reqest.data)
+        print(self.request.data)
         event = self.request.data['events'][0]
         self.cache_line_id(event)
         return event
