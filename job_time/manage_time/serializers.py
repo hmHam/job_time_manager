@@ -112,11 +112,11 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         total_work_hour = 0
         for day in days:
             days_report.append(
-                '{}日: {.1f}時間'.format(*day)
+                '{}日: {:.1f}時間'.format(*day)
             )
             total_work_hour += day[1]
         days_report.append(
-            '総労働時間: {.1f}'.format(total_work_hour)
+            '総労働時間: {:.1f}'.format(total_work_hour)
         )
         return days_report
 
