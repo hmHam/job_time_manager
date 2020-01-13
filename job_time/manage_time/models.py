@@ -28,6 +28,8 @@ class Salary(models.Model):
 
 # Create your models here.
 class Attendance(models.Model):
+    class Meta:
+        ordering = ['-clock_in_time']
     member = models.ForeignKey(Member, on_delete=models.PROTECT)
     date = models.DateField(unique=True)
     clock_in_time = models.DateTimeField()
