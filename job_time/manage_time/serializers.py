@@ -72,14 +72,14 @@ class FollowSerializer(LineIDGetter, ModelSerializer):
                 'altText': 'This is template',
                 'template': {
                     'type': 'buttons',
-                    'text': 'アカウントの詳細情報を設定しますか？'
+                    'text': 'アカウントの詳細情報を設定しますか？',
                     'actions': [
                         {
                             'type': 'uri',
                             'label': 'はい',
                             'uri': '{}?line_id={}'.format(
                                 path.join(settings.HOST_URL, 'profile'),
-                                line_id=self.validated_data['line_id']
+                                self.validated_data['line_id']
                             )
                         }
                     ]
@@ -91,9 +91,28 @@ class FollowSerializer(LineIDGetter, ModelSerializer):
 class ProfileRedirectSerializer(MemberGetter, Serializer):
     def save(self, **kwargs):
         pass
-
+    
     def to_representation(self, data):
-
+        return {'messages': [
+            {
+                'type': 'template',
+                'altText': 'This is template',
+                'template': {
+                    'type': 'buttons',
+                    'text': 'アカウントの詳細情報を設定しますか？',
+                    'actions': [
+                        {
+                            'type': 'uri',
+                            'label': 'はい',
+                            'uri': '{}?line_id={}'.format(
+                                path.join(settings.HOST_URL, 'profile'),
+                                self.validated_data['line_id']
+                            )
+                        }
+                    ]
+                }
+            }
+        ]}
 class SalarySerializer(MemberGetter, Serializer):
     '''今月の給料を出力して返信'''    
     def save(self, **kwargs):
