@@ -81,6 +81,8 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         ]
 
     def get_month_total(self, attendances):
+        if not attendances.exists():
+            return 0
         attendant_month = attendances.first().date.month
         month_salaries = Salary.objects.filter(
             attendance__in=attendances.values_list('id', flat=True),
