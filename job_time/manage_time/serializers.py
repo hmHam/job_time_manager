@@ -36,7 +36,7 @@ class SorrySerializer(LineIDGetter, Serializer):
         ]}
 
 
-class MemberSerializer(MemberGetter, ModelSerializer):
+class MemberSerializer(ModelSerializer):
     class Meta:
         model = Member
         fields = [
