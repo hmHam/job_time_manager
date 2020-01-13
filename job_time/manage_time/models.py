@@ -57,7 +57,7 @@ class Attendance(models.Model):
     
     def save(self, **kwargs):
         super().save(**kwargs)
-        if self.end_time is not None:
+        if self.clock_out_time is not None:
             # 終了時刻が入力された際は当日の給料を計算して保存
             work_time = self.get_work_time()
             Salary.objects.create(
