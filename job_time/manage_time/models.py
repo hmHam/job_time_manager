@@ -56,15 +56,15 @@ class Attendance(models.Model):
         return work_time // 3600
     
     def save(self, **kwargs):
-        instance = super().save(**kwargs)
-        if instance.end_time is not None:
+        super().save(**kwargs)
+        if self.end_time is not None:
             # 終了時刻が入力された際は当日の給料を計算して保存
-            work_time = instance.get_work_time()
+            work_time = self.get_work_time()
             Salary.objects.create(
-                attendance=instance,
+                attendance=self,
                 money=instance.member.hourly_wage * work_time
             )
-        return instance
+        return self
 
 class Break(models.Model):
     class Meata:
