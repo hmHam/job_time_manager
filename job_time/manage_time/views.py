@@ -71,7 +71,7 @@ class ProfileView(APIView):
         member = self.get_member()
         serializer = MemberSerializer(member, data=request.data)
         if not serializer.is_valid():
-            print(serializer)
+            print(serializer, 'serializer')
             return Response({
                 'serializer': serializer,
                 'member': serializer.validated_data['member']
