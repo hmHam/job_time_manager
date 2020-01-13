@@ -43,6 +43,14 @@ class MemberSerializer(MemberGetter, ModelSerializer):
             'name',
             'hourly_wage',
         ]
+
+    def validate(self, data):
+        member = Member.objects.filter(
+            line_id__text=self.initial_data['line_id']
+        ).first()
+        return {
+            'member': member
+        }
     
     def save(self, **kwargs):
         self.instance = self.validated_data['member']
@@ -91,7 +99,7 @@ class FollowSerializer(LineIDGetter, ModelSerializer):
 class ProfileRedirectSerializer(MemberGetter, Serializer):
     def save(self, **kwargs):
         pass
-    
+
     def to_representation(self, data):
         return {'messages': [
             {
@@ -113,6 +121,8 @@ class ProfileRedirectSerializer(MemberGetter, Serializer):
                 }
             }
         ]}
+
+
 class SalarySerializer(MemberGetter, Serializer):
     '''今月の給料を出力して返信'''    
     def save(self, **kwargs):
