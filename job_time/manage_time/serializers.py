@@ -36,7 +36,7 @@ class SorrySerializer(LineIDGetter, Serializer):
         ]}
 
 
-class MemberSerializer(ModelSerializer):
+class MemberSerializer(MemberGetter, ModelSerializer):
     class Meta:
         model = Member
         fields = [
@@ -44,6 +44,10 @@ class MemberSerializer(ModelSerializer):
             'hourly_wage',
         ]
     
+    def save(self, **kwargs):
+        self.instance = self.validated_data['member']
+        super().save(**kwargs)
+
 
 class FollowSerializer(LineIDGetter, ModelSerializer):
     class Meta:

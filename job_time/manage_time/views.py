@@ -19,24 +19,6 @@ from job_time.manage_time.serializers import (
 )
 from job_time.manage_time.models import Member
 
-
-class ProfileView(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'prof.html'
-
-    def get(self, request, pk):
-        profile = get_object_or_404(Member, pk=pk)
-        serializer = MemberSerializer(profile)
-        return Response({'serializer': serializer, 'member': profile})
-
-    def post(self, request, pk):
-        profile = get_object_or_404(Member, pk=pk)
-        serializer = MemberSerializer(profile, data=request.data)
-        if not serializer.is_valid():
-            return Response({'serializer': serializer, 'member': profile})
-        serializer.save()
-        return redirect('profile', pk=pk)
-
 @auth
 def push(event, data, options={}, headers={}):
     data["to"] = event['source']['userId']
@@ -47,7 +29,44 @@ def push(event, data, options={}, headers={}):
     return Response({}, status=res.status_code)
 
 
-class TimeManageAPIView(APIView):
+class LineMessageWebhookMixin(object):
+    def get_event(self):
+        event = self.request.data['events'][0]
+        self.cache_line_id(event)
+        return event
+
+
+    def cache_line_id(self, event):
+        serializer = CacheLineIDSerializer(data=event)
+        if serializer.is_valid():
+            return serializer.cache()
+        
+
+class ProfileView(LineMessageWebhookMixin, APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'prof.html'
+
+    def get(self, request, pk):
+        event = self.get_event()
+        serializer = MemberSerializer(data=event)
+        return Response({
+            'serializer': serializer,
+            'member': serializer.validated_data['member']
+        })
+
+    def post(self, request, pk):
+        event = self.get_event()
+        serializer = MemberSerializer(data=event)
+        if not serializer.is_valid():
+            return Response({
+                'serializer': serializer,
+                'member': serializer.validated_data['member']
+            })
+        serializer.save()
+        return push(event, )
+
+
+class TimeManageAPIView(LineMessageWebhookMixin, APIView):
     serializer_map = {
         'follow': FollowSerializer,
         'postback': {
@@ -60,11 +79,7 @@ class TimeManageAPIView(APIView):
             }
         }
     }
-    def cache_line_id(self, event):
-        serializer = CacheLineIDSerializer(data=event)
-        if serializer.is_valid():
-            return serializer.cache()
-        
+
     def get_serializer(self, event):
         s = self.serializer_map.get(event['type'], SorrySerializer)
         if isinstance(s, dict):
@@ -73,8 +88,7 @@ class TimeManageAPIView(APIView):
 
     def post(self, request, format=None):
         try:
-            event = self.request.data['events'][0]
-            self.cache_line_id(event)
+            event = self.get_event()
             serializer = self.get_serializer(event)
             print(serializer)
             serializer.is_valid(raise_exception=True)
