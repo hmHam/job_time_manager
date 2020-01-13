@@ -114,7 +114,14 @@ class TimeManageAPIView(LineMessageWebhookMixin, APIView):
     
     def handle_exception(self, exc):
         if isinstance(exc, IntegrityError):
-            return push(self.event, str(exc))
+            return push(self.event,                 {
+                'messages': [
+                    {
+                        'type': 'text',
+                        'text': str(exc)
+                    }
+                ]
+            })
         return super().handle_exception(exc)
         
 
