@@ -62,7 +62,7 @@ class Attendance(models.Model):
             work_time = self.get_work_time()
             Salary.objects.create(
                 attendance=self,
-                money=instance.member.hourly_wage * work_time
+                money=self.member.hourly_wage * work_time
             )
         return self
 
