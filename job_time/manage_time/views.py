@@ -1,10 +1,12 @@
 import requests
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.db import IntegrityError
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
 from rest_framework.renderers import TemplateHTMLRenderer
+
 from job_time.auth import auth
 from job_time.manage_time.serializers import (
     CacheLineIDSerializer,
@@ -88,7 +90,7 @@ class TimeManageAPIView(LineMessageWebhookMixin, APIView):
 
     def post(self, request, format=None):
         try:
-            event = self.get_event()
+            self.event = self.get_event()
             serializer = self.get_serializer(event)
             print(serializer)
             serializer.is_valid(raise_exception=True)
@@ -108,5 +110,11 @@ class TimeManageAPIView(LineMessageWebhookMixin, APIView):
                 }
             )
         return Response({'detail': 'その他'})
+    
+    def handle_exception(self, exc):
+        if isinstance(exc, IntegrityError):
+            return push(self.event, str(exc))
+        return super().handle_exception(exc)
+        
 
 
