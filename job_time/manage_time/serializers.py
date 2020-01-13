@@ -10,7 +10,6 @@ from job_time.manage_time.models import (
     Break,
     Member,
     LineID,
-    Salary,
 )
 from job_time.manage_time.mixins import (
     LineIDGetter,
@@ -84,12 +83,8 @@ class FollowSerializer(LineIDGetter, ModelSerializer):
             }
         ]}
 
-class SalarySerializer(MemberGetter, ModelSerializer):
-    '''今月の給料を出力して返信'''
-    class Meta:
-        model = Salary
-        fields = []
-    
+class SalarySerializer(MemberGetter, Serializer):
+    '''今月の給料を出力して返信'''    
     def save(self, **kwargs):
         pass
 
@@ -103,7 +98,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         days = [
             (
                 at.date.day,
-                at.get_work_time()
+                at.work_time.seconds // 3600
             ) for at in attendances
         ]
         if len(days) == 0:
@@ -124,16 +119,16 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         if not attendances.exists():
             return 0
         attendant_month = attendances.first().date.month
-        month_salaries = Salary.objects.filter(
-            attendance__in=attendances.values_list('id', flat=True),
-        )
-        print(month_salaries)
-        if not month_salaries.exists():
-            if attendances.filter(clock_out_time__isnull=True).exists():
-                # 最新の出勤の退勤時刻が埋まっているかを確認
-                raise ValidationError("未退勤の出勤があります")
-            return 0
-        return month_salaries.aggregate(total=Sum('money'))['total']
+        wage = self.member.hourly_wage
+        total_work_time = attendances.aggregate(
+            total_work_time=Sum('work_time')
+        )['total_work_time']
+        total_work_time = total_work_time if total_work_time is not None else 0
+        total_salary = (total_work_time.seconds // 3600) * self.member.hourly_wage
+        if attendances.filter(clock_out_time__isnull=True).exists():
+            # 最新の出勤の退勤時刻が埋まっているかを確認
+            raise ValidationError("未退勤の出勤があります")
+        return total_salary
         
 
     def month_salary_report(self):
