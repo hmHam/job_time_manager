@@ -114,6 +114,9 @@ class SalarySerializer(MemberGetter, ModelSerializer):
             )
         ]
         text += ['-' * 20]
+        text += ['時給{:>25}円で計算しています'.format(
+            self.validated_data['member'].hourly_wage
+        )]
         return "\n".join(text)
 
     def to_representation(self, data):
