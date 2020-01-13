@@ -72,8 +72,12 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         )
 
     def get_attendant_days(self, attendances):
+        attendances = attendances.order_by('-clock_in_time')
         return [
-            '{}: {:.1f}時間'.format(at.date.strftime('%d日'), at.get_work_time()) for at in attendances.all()
+            '{}: {:.1f}時間'.format(
+                at.date.strftime('%d日'),
+                 at.get_work_time()
+            ) for at in attendances
         ]
 
     def get_month_total(self, attendances):
