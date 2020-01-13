@@ -109,7 +109,7 @@ class SalarySerializer(MemberGetter, ModelSerializer):
         text = [text] + self.get_attendant_days(month_attendances)
         text += [
             '-' * 20,
-            '¥{:>25}'.format(
+            '¥{:>25.f}'.format(
                 self.get_month_total(month_attendances)
             )
         ]
