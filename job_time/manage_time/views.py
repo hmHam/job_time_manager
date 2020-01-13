@@ -21,8 +21,6 @@ from rest_framework.renderers import TemplateHTMLRenderer
 
 
 class ProfileView(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'prof.html'
 
