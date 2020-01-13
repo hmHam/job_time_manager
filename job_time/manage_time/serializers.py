@@ -124,7 +124,7 @@ class SalarySerializer(MemberGetter, Serializer):
             total_work_time=Sum('work_time')
         )['total_work_time']
         total_work_time = total_work_time if total_work_time is not None else 0
-        total_salary = (total_work_time.seconds // 3600) * self.member.hourly_wage
+        total_salary = (total_work_time.seconds // 3600) * wage
         if attendances.filter(clock_out_time__isnull=True).exists():
             # 最新の出勤の退勤時刻が埋まっているかを確認
             raise ValidationError("未退勤の出勤があります")
