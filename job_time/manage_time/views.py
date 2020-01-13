@@ -24,7 +24,10 @@ from job_time.manage_time.models import Member
 
 @auth
 def push(event, data, options={}, headers={}):
-    data["to"] = event['source']['userId']
+    if 'to' in options:
+        data['to'] = options['to']
+    else:
+        data["to"] = event['source']['userId']
     print(data)
     URL = 'https://api.line.me/v2/bot/message/push'
     res = requests.post(URL, json=data, headers=headers)
@@ -73,7 +76,7 @@ class ProfileView(APIView):
                 'member': serializer.validated_data['member']
             })
         serializer.save()
-        return push(event, serializer.data)
+        return push({}, serializer.data, options={'to': member.line_id.text})
 
 
 class TimeManageAPIView(LineMessageWebhookMixin, APIView):
