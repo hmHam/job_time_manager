@@ -18,6 +18,7 @@ from job_time.manage_time.serializers import (
     SorrySerializer,
     SalarySerializer,
     MemberSerializer,
+    ProfileRedirectSerializer,
 )
 from job_time.manage_time.models import Member
 
@@ -79,6 +80,7 @@ class TimeManageAPIView(LineMessageWebhookMixin, APIView):
                 'break_start': BreakStartSerializer,
                 'break_end': BreakEndSerializer,
                 'salary': SalarySerializer,
+                'profile_redirect': ProfileRedirectSerializer
             }
         }
     }

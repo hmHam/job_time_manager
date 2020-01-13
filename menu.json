@@ -53,8 +53,8 @@
                 "height": 400
             },
             "action": {
-                "type": "uri",
-                "uri": "https://job-time.herokuapp.com/profile/"
+                "type": "postback",
+                "data": "profile_redirect"
             }
         },
         {

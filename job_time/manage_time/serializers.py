@@ -72,20 +72,27 @@ class FollowSerializer(LineIDGetter, ModelSerializer):
                 'altText': 'This is template',
                 'template': {
                     'type': 'buttons',
-                    'text': '''
-                    フォローありがとうございます、{}を作成しました!!
-                    詳細情報を設定する場合は、以下のボタンを押してください
-                    '''.format(self.validated_data['line_id']),
+                    'text': 'アカウントの詳細情報を設定しますか？'
                     'actions': [
                         {
                             'type': 'uri',
-                            'label': '設定',
-                            'uri': path.join(settings.HOST_URL, 'profile')
+                            'label': 'はい',
+                            'uri': '{}?line_id={}'.format(
+                                path.join(settings.HOST_URL, 'profile'),
+                                line_id=self.validated_data['line_id']
+                            )
                         }
                     ]
                 }
             }
         ]}
+
+
+class ProfileRedirectSerializer(MemberGetter, Serializer):
+    def save(self, **kwargs):
+        pass
+
+    def to_representation(self, data):
 
 class SalarySerializer(MemberGetter, Serializer):
     '''今月の給料を出力して返信'''    
@@ -178,7 +185,6 @@ class ClockInSerializer(MemberGetter, ModelSerializer):
         )
 
     def to_representation(self, data):
-        print('hoge')
         return {'messages': [{
                 'type': 'text',
                 'text': 'おはようございます'
