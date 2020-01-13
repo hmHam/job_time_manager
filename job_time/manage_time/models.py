@@ -22,7 +22,7 @@ class Member(models.Model):
 class Salary(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = '日当'
-    attendance = models.ForeignKey('Attendance', on_delete=models.CASCADE, unique=True)
+    attendance = models.OneToOneField('Attendance', on_delete=models.CASCADE)
     money = models.FloatField(verbose_name='金額')
 
 
