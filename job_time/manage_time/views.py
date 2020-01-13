@@ -46,7 +46,7 @@ class ProfileView(LineMessageWebhookMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'prof.html'
 
-    def get(self, request, pk):
+    def get(self, request):
         event = self.get_event()
         serializer = MemberSerializer(data=event)
         return Response({
@@ -54,7 +54,7 @@ class ProfileView(LineMessageWebhookMixin, APIView):
             'member': serializer.validated_data['member']
         })
 
-    def post(self, request, pk):
+    def post(self, request):
         event = self.get_event()
         serializer = MemberSerializer(data=event)
         if not serializer.is_valid():
