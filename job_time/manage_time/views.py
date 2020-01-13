@@ -35,7 +35,7 @@ class ProfileView(APIView):
         if not serializer.is_valid():
             return Response({'serializer': serializer, 'member': profile})
         serializer.save()
-        return redirect('profile')
+        return redirect('profile', pk=pk)
 
 @auth
 def push(event, data, options={}, headers={}):
