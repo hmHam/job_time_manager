@@ -24,8 +24,9 @@ class Member(models.Model):
 class Attendance(models.Model):
     class Meta:
         ordering = ['-clock_in_time']
+        unique_together = ['member', 'date']
     member = models.ForeignKey(Member, on_delete=models.PROTECT)
-    date = models.DateField(unique=True)
+    date = models.DateField()
     clock_in_time = models.DateTimeField()
     clock_out_time = models.DateTimeField(null=True)
     work_time = models.DurationField(null=True)
