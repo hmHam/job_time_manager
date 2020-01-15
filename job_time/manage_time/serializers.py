@@ -62,6 +62,8 @@ class FollowSerializer(LineIDGetter, ModelSerializer):
         user = User.objects.create(
             username=validated_data['line_id']
         )
+        user.set_password('test')
+        user.save()
         print('userID', userId)
         return Member.objects.create(
             user=user,
@@ -125,6 +127,7 @@ class SalarySerializer(MemberGetter, Serializer):
 
     def get_month_attendances(self):
         return Attendance.objects.filter(
+            member=self.validated_data['member'],
             date__month=self.validated_data['date'].month
         )
 
