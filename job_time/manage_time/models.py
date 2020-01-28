@@ -29,7 +29,7 @@ class Attendance(models.Model):
     date = models.DateField()
     clock_in_time = models.DateTimeField()
     clock_out_time = models.DateTimeField(null=True)
-    work_time = models.DurationField(null=True)
+    work_time = models.DurationField(null=True, blank=True)
 
     def __str__(self):
         return self.date.strftime('%Y年%m月%d日出勤')
