@@ -10,8 +10,8 @@ try:
 except ImproperlyConfigured:
     BASE_DIR = ''
 
-CHANNEL_ID = '1653759302'
-CHANNEL_SECRET = '123371074bdeed8827c67507778eb106'
+CHANNEL_ID = ''
+CHANNEL_SECRET = ''
 
 def get_token():
     with open(path.join(BASE_DIR, 'token.pickle'), 'rb') as f:
