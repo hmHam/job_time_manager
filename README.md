@@ -3,5 +3,8 @@
 * 「夏休みまでに〇〇円稼ぎたい」と思ってる学生は、スケジュールを立てにくく、ダラダラ出勤することになってしまう。
 * [Message API](https://developers.line.biz/en/services/messaging-api/)を利用して出退勤をすることで、来月入ってくる給料の計算ができるようにする。それにより、スケジュール管理をしてパフォーマンスを向上させる。
 
+# 完成品
+[image](https://user-images.githubusercontent.com/31150623/142143486-2a19b476-b359-4403-8ffb-39e4cd3fbff5.png)
+##### 注意
+* 過去に運用していたもののため、現在は残骸しか残っていない。
 
-![image](https://user-images.githubusercontent.com/31150623/142143486-2a19b476-b359-4403-8ffb-39e4cd3fbff5.png)
