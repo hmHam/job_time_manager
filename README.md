@@ -6,6 +6,9 @@
 # 完成品
 ![image](https://user-images.githubusercontent.com/31150623/142143486-2a19b476-b359-4403-8ffb-39e4cd3fbff5.png)
 
+# メニューとして使っていた画像
+![image](https://user-images.githubusercontent.com/31150623/172051366-1191efde-7431-4314-8564-d42ed0ca01ce.png)
+
 ##### 注意
 * 過去に運用していたもののため、現在は残骸しか残っていない。
 
